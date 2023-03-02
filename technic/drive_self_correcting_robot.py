@@ -1,6 +1,6 @@
 from sshkeyboard import listen_keyboard_manual
 import asyncio
-from SelfCorrectingRobot import SelfCorrectingRobot
+from technic.robots.SelfCorrectingRobot import SelfCorrectingRobot
 
 bot = SelfCorrectingRobot()
 

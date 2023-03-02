@@ -1,7 +1,7 @@
-from EncoderCounter import EncoderCounter
+from technic.Encoders.EncoderCounter import EncoderCounter
 import time
-from pid_controller import PIController
-from Motors import Motors
+from technic.utilities.pid_controller import PIController
+from technic.Motors.Motors import Motors
 import asyncio
 
 class Counter():
