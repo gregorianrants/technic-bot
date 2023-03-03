@@ -17,21 +17,17 @@ class Encoder(EventEmitter):
     self.sleep = 0.025
     self.running = False
 
-  def getSpeed(self,time_interval,angle_interval):
-    angle_as_fraction = angle_interval/360
-    distance_traveled = angle_as_fraction*self.wheel_diameter
-    speed = distance_traveled/time_interval
-    return speed
 
+  def getSpeed(self):
+    speed =  (self.motor.get_speed()/360)*self.wheel_diameter
+    return speed
+  
   def update(self):
     latest = self.motor.get_position()
-    latest_time = time.time()
-    time_interval = latest_time - self.previous_time
     angle_interval = abs(latest-self.previous_count)
     self.count = self.count + angle_interval
-    self.speed = self.getSpeed(time_interval,angle_interval)
+    self.speed = self.getSpeed()
     self.previous_count = latest
-    self.previous_time = latest_time
 
   def reset(self):
     self.count = 0
@@ -51,4 +47,6 @@ class Encoder(EventEmitter):
       if(self.running==False):
         break
     print('encoder stopped')
+
+  
 

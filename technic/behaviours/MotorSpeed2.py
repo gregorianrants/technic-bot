@@ -10,16 +10,17 @@ print(pathlib.Path.cwd())
 
 class MotorSpeed:
     def __init__(self,encoder,motor,set_point=40):
-      self.encoder = encoder
       self.motor = motor
-      self.p = 0.04
-      self.k = 0.002
-      self.d = 0.00
+      self.p = 0.01
+      self.k = 0.00
+      self.d = 0.001
       self.pid = PIController(self.p,self.k,self.d)
       ##power should probably be passed by previouse behaviour
       self.power=set_point/2
       self.errors = []
       self.set_point = set_point
+      self.encoder = encoder
+      self.running = False
 
     def stop(self):
        self.motor.stop()
@@ -41,15 +42,23 @@ class MotorSpeed:
        plt.savefig(png_path)
           
 
-    async def update(self,encoder_values):
-      speed = encoder_values['speed']
+    def update(self,speed):
       error = speed-self.set_point
       self.errors.append(error)
       adjustment = self.pid.get_value(error)
       self.power = self.power-adjustment
       self.motor.pwm(self.power)
- 
+
+    def handle_rotation(self,speed):
+       self.update(speed)
+       
     def start(self):
+      self.running = True
       self.motor.pwm(self.power)
       time.sleep(0.01)
-      self.encoder.add_listener(f'{self.encoder.name}_encoder',self.update)
+      self.encoder.handle_rotation = self.handle_rotation
+
+    def stop(self):
+       self.encoder.handle_rotation = None
+       self.motor.stop()
+       

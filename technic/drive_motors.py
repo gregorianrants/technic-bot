@@ -32,9 +32,9 @@ async def main():
 async def press(key):
     print(f"'{key}' pressed")
     if(key=='up'):
-        motors.forward(50)
+        motors.forward(40)
     elif(key=='down'):
-        motors.backward(30)
+        motors.backward(40)
     elif(key=='left'):
         motors.pivot_left(30)
     elif(key=='right'):
